@@ -10,15 +10,19 @@ namespace Examen
         Graphics papel;
         bool paint;
         private Graphics g;
+        Bitmap bm;
         private Point? previousPoint;
         private Pen pen = new Pen(Color.Black, 3);
+       
         public Form1()
         {
             InitializeComponent();
-
-
+         
+            g = Graphics.FromImage(bm);
             pbPapel.Image = new Bitmap(pbPapel.Height, pbPapel.Width);
             papel = pbPapel.CreateGraphics();
+            pbPapel.Image = bm;
+
             pen = new Pen(Color.FromArgb(0, 0, 0), 3);
             papel.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         }
@@ -69,22 +73,23 @@ namespace Examen
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-             
-            Bitmap bmp = new Bitmap(pbPapel.Width, pbPapel.Height);
-            pbPapel.DrawToBitmap(bmp, new Rectangle(0, 0, pbPapel.Width, pbPapel.Height));
 
-            // Define el nombre del archivo y la ruta donde se guardará la imagen
-            string fileName = "dibujo.png";
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName);
+            SaveFileDialog guardar = new SaveFileDialog();
+            guardar.Filter = "Image(*.jpg)|*.jpg|(*.*|*.*";
 
-            // Guarda el dibujo en el disco duro
-            bmp.Save(filePath, ImageFormat.Png);
 
-            // Libera los recursos del objeto Bitmap
-            bmp.Dispose();
+            if (guardar.ShowDialog() == DialogResult.OK)
+            {
+                Bitmap btm = bm.Clone(new Rectangle(0, 0, pbPapel.Width, pbPapel.Height), bm.PixelFormat);
+                btm.Save(guardar.FileName, ImageFormat.Png);
+
+
+            }
+
+
 
         }
 
 
-}
+    }
 }
